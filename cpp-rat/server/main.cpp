@@ -14,6 +14,10 @@ int main() {
     return 1;
   }
 
+  int opt = 1;
+  setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt,
+             sizeof(opt));
+
   // 2. Define the address to bind to
   sockaddr_in address{};
   address.sin_family = AF_INET;
