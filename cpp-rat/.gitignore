@@ -1,0 +1,40 @@
+# Build folders
+build/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+
+# Compiled binaries
+*.out
+*.o
+*.obj
+*.so
+*.a
+*.exe
+*.dll
+
+# Logs and dumps
+*.log
+*.core
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Editor/IDE junk
+*.swp
+*.swo
+.vscode/
+.idea/
+*.user
+*.code-workspace
+
+# Ignore generated screenshots or outputs
+*.png
+*.jpg
+
+# Optional: Exclude generated client/server binaries
+client/client
+server/server
+
