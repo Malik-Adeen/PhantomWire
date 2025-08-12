@@ -34,7 +34,7 @@ Thumbs.db
 *.png
 *.jpg
 
-# Optional: Exclude generated client/server binaries
+#Exclude generated client/server binaries
 client/client
 server/server
 
